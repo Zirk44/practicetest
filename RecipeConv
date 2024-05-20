@@ -1,0 +1,43 @@
+from fractions import Fraction
+import math
+
+import Valid
+
+
+def convertFraction(frac):
+    frac = float(frac)
+    if frac < 1:
+        return str(Fraction(frac).limit_denominator(100))
+    else:
+        wholeNum = int(math.floor(frac))
+        Remain = frac - wholeNum
+        if Remain != 0:
+            return str(wholeNum) + " " + str(Fraction(Remain))
+        return str(wholeNum)
+
+def detCups(numCups):
+    if numCups <= 1:
+        single = convertFraction(numCups) + " cup"
+        return single
+            # from fractions import Fraction
+            # Fraction(0.25)
+            # Fraction(1, 4)
+    else:
+        mult = convertFraction(numCups) + " cups"
+        return mult
+def detPieces(numPieces):
+    if numPieces == 1:
+        single = convertFraction(numPieces) + " piece"
+        return single
+    else:
+        mult = convertFraction(numPieces) + " pieces"
+        return mult
+
+
+def detTbsp(numSp):
+    if numSp == 1:
+        single = (str(numSp) + " tblsp")
+        return single
+    else:
+        mult = convertFraction(numSp) + " tblsps"
+        return mult
