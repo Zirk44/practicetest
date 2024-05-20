@@ -1,0 +1,135 @@
+import pymssql
+class Database:
+    # Fetches rows out a database and packages as list of objects
+    # Database class will have connection
+    _connection = None
+    @classmethod
+    def connect(cls):
+        if cls._connection == None:
+            cls._connection = pymssql.connect(
+                server="cisdbss.pcc.edu",
+                database="NAMES",
+                user="275student",
+                password="275student",
+            )
+
+    @classmethod
+    def fetch_details(cls, name, year, gender):
+        from Details import Details
+        # SQL query to fetch details based on the selected criteria
+        sql = f'''
+                USE NAMES;
+                SELECT TOP 50 n.Name, ygt.Year, ygt.Gender, nc.NameCount, ygt.Total
+                FROM names n
+                JOIN name_counts nc ON n.NameID = nc.FK_NameID
+                JOIN year_gender_totals ygt ON nc.FK_YearGenderTotalID = ygt.YearGenderTotalID
+                WHERE  (ygt.Gender = '{gender}' OR '{gender}' = '') AND
+                (n.Name = '{name}' OR '{name}' = '') AND
+                (CAST(ygt.Year AS INT) = '{year}' OR '{year}' = '');
+              '''
+        cls.connect()
+        cursor = cls._connection.cursor()
+        cursor.execute(sql)
+
+        detailList = []
+        detailList = cursor.fetchall()  # Fetch all rows
+
+        # for detail in detailList:
+        #     detailLists.append(Details(*detail))
+        return detailList
+
+    @classmethod
+        # classmethod is database class, not object
+    def fetch_names(cls):
+        from Details import showName
+
+        sql = '''
+        SELECT DISTINCT Name
+        FROM names;
+        '''
+        cls.connect()
+        cursor = cls._connection.cursor()
+        cursor.execute(sql)
+        names = []
+        name = cursor.fetchone()
+        while name:
+            names.append(showName(name[0]))
+            name = cursor.fetchone()
+        return names
+
+    @classmethod
+        # classmethod is database class, not object
+    def fetch_years(cls):
+        from Details import showYear
+
+        sql = '''
+        SELECT DISTINCT Year
+        FROM year_gender_total;
+        '''
+        cls.connect()
+        cursor = cls._connection.cursor()
+        cursor.execute(sql)
+        years = []
+        year = cursor.fetchone()
+        while year:
+            years.append(showYear(year[0]))
+            year = cursor.fetchone()
+        return years
+
+    @classmethod
+    def start_details(cls, name, year, gender, nameCount, total):
+        from Details import Details
+        sql = f'''
+                    USE NAMES;
+                    SELECT TOP 50 n.Name, ygt.Year, ygt.Gender, nc.NameCount, ygt.Total
+                    FROM names n
+                    JOIN name_counts nc ON n.NameID = nc.FK_NameID
+                    JOIN year_gender_totals ygt ON nc.FK_YearGenderTotalID = ygt.YearGenderTotalID;
+                  '''
+        cls.connect()
+        cursor = cls._connection.cursor()
+        cursor.execute(sql)
+
+        tableLists = []
+        tableList = cursor.fetchall()  # Fetch all rows
+
+        for table in tableList:
+            tableLists.append(Details(*table))
+
+        return tableLists
+
+    @classmethod
+    def fetch_nameCount(cls):
+        from Details import showNameCount
+        sql = '''
+                        SELECT DISTINCT NameCount
+                        FROM name_counts;
+                        '''
+        cls.connect()
+        cursor = cls._connection.cursor()
+        cursor.execute(sql)
+        nameCounts = []
+        nameCount = cursor.fetchone()
+        while nameCount:
+            nameCounts.append(showNameCount(nameCount[0]))
+            nameCount = cursor.fetchone()
+        return nameCounts
+
+    @classmethod
+    def fetch_total(cls):
+        from Details import showTotal
+        sql = '''
+                        SELECT DISTINCT Total
+                        FROM year_gender_totals;
+                        '''
+        cls.connect()
+        cursor = cls._connection.cursor()
+        cursor.execute(sql)
+        totals = []
+        total = cursor.fetchone()
+        while total:
+            totals.append(showTotal(total[0]))
+            total = cursor.fetchone()
+        return totals
+
+
