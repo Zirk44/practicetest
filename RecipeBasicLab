@@ -1,0 +1,119 @@
+#******************************************************************************
+# Author:           Kris Meyer
+# Lab:              Lab7
+# Date:             11/17/2023
+# Description:      The purpose of this lab is to add iteration to your Lab 4
+#                   to execute a set of statements 0 or more times.
+# Input:            number of guests, type of recipe, request diff recipe
+# Output:           ingredients list for recipes based on guest number
+# Sources:          Lab 7 instructions
+#******************************************************************************
+
+# Welcome to the Quick Shopping List Creator!
+# Please follow the instructions below to see the list of ingredients needed :)
+
+# How many people will be eating?
+# What recipe do you want to make?
+
+# Calculation is amount of ingredients per recipe * number of people eating
+# Want the outcomes to be expressed as a receipt EX: 1/3 cup of flour, 1 full banana
+
+# Below is your shopping list!
+# Print List
+# Bon Appetit! - outro
+
+# Recipe #1 Pancakes: (per person)
+# 1/2 cup of pancake mix
+# 1/2 cup of water
+# 1/10 of butter stick
+# 1/4 of maple syrup
+
+# Recipe #2 Pizza: (per person)
+# 1 pre-made personal size pizza dough
+# 1/2 cup of marinara sauce
+# 1 cups of mozzarella cheese
+# 1/4 cup of pepperoni slices
+
+# Does anyone want another recipe?
+# If yes, prompt for recipe and guests again
+# If no, print outro
+
+import Valid as v
+import RecipeBook as r
+def main():
+    # Variables
+    guests = 0
+    recipe = ["Pancakes", "Pasta", "Pizza"]
+    total_guests = []
+    hungry = "y"
+
+    #Intro
+    run_intro()
+
+    # Inputs
+    guests = get_guests(guests, total_guests)
+    choice = getRecipe(recipe)
+    printRecipe(guests, choice)
+
+    hungry = get_hungry()
+    while hungry == "y":
+        guests = get_guests(guests, total_guests)
+        choice = getRecipe(recipe)
+        print("\nBelow is an updated list of ingredients!")
+        printRecipe(guests, choice)
+        hungry = get_hungry()
+    run_outro(total_guests)
+
+
+def run_intro():
+    """
+    Output a friendly welcome introduction to the program.
+    :return: intro
+    """
+    print("Welcome to the Quick Shopping List Creator!")
+    print("Please enter the details below to see the list of ingredients needed :)")
+
+def get_guests(guests, total_guests):
+    """
+    The customer inputs the number of people eating.
+    :input: int, how many guests
+    :return: int, how many guests
+    """
+    guests = 0
+    guests = v.get_integer("How many people are eating? ")
+    total_guests.append(guests)
+    return guests
+
+def get_hungry():
+    """
+    The customer inputs y or n
+    :input: y, n
+    :return: request for another recipe
+    """
+    return v.get_y_or_n("\nDoes anyone want another recipe (y/n): ")
+
+def getRecipe(recipe):
+    # recipes[Pancakes, Pasta, Pizza]
+    choice = (input("What recipe do you want to make? (Pizza, Pasta or Pancakes?) ").capitalize())
+    if choice in recipe:
+        return choice
+    else:
+        print("Sorry!  We don't have that recipe yet :(")
+
+def printRecipe(guests, choice):
+    if choice == "Pizza":
+        r.pizza(guests)
+    elif choice == "Pasta":
+        r.pasta(guests)
+    elif choice == "Pancakes":
+        r.pancakes(guests)
+
+def run_outro(total_guests):
+    """
+    A lovely exit message for the customer
+    :return: Outro
+    """
+    # print(str("You fed" + sum(total_guests) + "people! Bon Appetit!"))
+    print(str("You fed {0} people! Bon Appetit!".format(sum(total_guests))))
+
+main()
