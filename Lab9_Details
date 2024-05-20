@@ -1,0 +1,95 @@
+# File for the classes based on the combo boxes
+# Makes the database objects into something the ui can understand
+
+from Database import Database
+
+class Details:
+    # n.Name, ygt.Year, ygt.Gender, nc.NameCount, ygt.Total
+    def __init__(self, name, year, gender, name_count, total):
+        self._name = name
+        self._year = year
+        self._gender = gender
+        self._name_count = name_count
+        self._total = total
+
+    # n.Name, ygt.Year, ygt.Gender, nc.NameCount, ygt.Total
+    def get_name(self):
+        return self._name
+
+    def get_year(self):
+        return self._year
+
+    def get_gender(self):
+        return self._gender
+
+    def get_nameCount(self):
+        return self._name_count
+
+    def get_total(self):
+        return self._total
+
+    @staticmethod
+    def get_details(dict_dataset):
+        details_objects = []
+        for data in dict_dataset:
+            name = data['name']
+            year = data['year']
+            gender = data['gender']
+            detail_obj = Details(name, year, gender)
+            details_objects.append(detail_obj)
+        return details_objects
+
+class showName:
+    def __init__(self, name):
+        self._name = name
+    def get_name(self):
+        return self._name
+
+    @staticmethod
+        # skips self because static method doesn't need object
+    def fetch_names():
+        return Database.fetch_names()
+
+class showYear:
+    def __init__(self, year):
+        self._year = year
+    def get_year(self):
+        return self._year
+
+    @staticmethod
+        # skips self because static method doesn't need object
+    def fetch_year():
+        return Database.fetch_years()
+
+class showGender:
+    def __init__(self, gender):
+        self._gender = gender
+
+    def get_gender(self):
+        return self._gender
+    @staticmethod
+        # skips self because static method doesn't need object
+    def fetch_gender():
+        return Database.fetch_gender()
+
+class showNameCount:
+    def __init__(self, nameCount):
+        self._nameCount = nameCount
+
+    def get_nameCount(self):
+        return self._nameCount
+    @staticmethod
+        # skips self because static method doesn't need object
+    def fetch_nameCount():
+        return Database.fetch_nameCount()
+
+class showTotal:
+    def __init__(self, total):
+        self._total = total
+
+    def get_total(self):
+        return self._total
+    @staticmethod
+        # skips self because static method doesn't need object
+    def fetch_total():
+        return Database.fetch_total()
